@@ -1,0 +1,17 @@
+{
+  "name": "forge-cloud",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Forge Cloud — Cloudflare Workers + Hono + PostgreSQL. Bible study and research platform.",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:api": "npm run dev --workspace=@forge-cloud/api",
+    "deploy:api": "npm run deploy --workspace=@forge-cloud/api",
+    "typecheck": "npm run typecheck --workspaces --if-present"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
