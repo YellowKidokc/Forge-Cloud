@@ -1,0 +1,26 @@
+{
+  "name": "forge-cloud",
+  "version": "1.0.0",
+  "description": "Cloudflare Worker backend for the Forge editor. Implements the `StorageAdapter` interface from `@forge/core` — D1 for structured data (notes, annotations, layers, grid metadata), R2 for binary file storage.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YellowKidokc/Forge-Cloud.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/YellowKidokc/Forge-Cloud/issues"
+  },
+  "homepage": "https://github.com/YellowKidokc/Forge-Cloud#readme",
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20260421.1",
+    "typescript": "^6.0.3",
+    "wrangler": "^4.84.0"
+  }
+}

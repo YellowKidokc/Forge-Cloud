@@ -1,0 +1,15 @@
+name = "forge-cloud"
+main = "src/index.ts"
+compatibility_date = "2025-01-01"
+
+[vars]
+ENVIRONMENT = "production"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "forge-cloud"
+database_id = "04ca0761-157e-4f8e-987b-89a463821ea3"
+
+[[r2_buckets]]
+binding = "STORAGE"
+bucket_name = "forge-vaults"
