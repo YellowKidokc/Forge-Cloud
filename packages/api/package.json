@@ -2,21 +2,23 @@
   "name": "@forge-cloud/api",
   "version": "0.1.0",
   "private": true,
-  "description": "Forge Cloud API — Hono on Cloudflare Workers backed by PostgreSQL.",
+  "description": "Forge Cloud API — Hono on Cloudflare Workers backed by D1.",
   "main": "src/index.ts",
   "scripts": {
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "db:create": "wrangler d1 create forge-bible",
+    "db:migrate:local": "wrangler d1 migrations apply forge-bible --local",
+    "db:migrate:remote": "wrangler d1 migrations apply forge-bible --remote",
+    "db:seed:local": "wrangler d1 execute forge-bible --local --file=./migrations/0002_seed.sql",
+    "db:seed:remote": "wrangler d1 execute forge-bible --remote --file=./migrations/0002_seed.sql"
   },
   "dependencies": {
-    "hono": "^4.6.3",
-    "pg": "^8.13.0"
+    "hono": "^4.6.3"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20241011.0",
-    "@types/node": "^20.16.11",
-    "@types/pg": "^8.11.10",
     "typescript": "^5.6.3",
     "wrangler": "^3.80.0"
   }

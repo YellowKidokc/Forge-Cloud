@@ -1,8 +1,8 @@
 export interface Env {
-  DATABASE_URL: string;
+  DB: D1Database;
   DEFAULT_TRANSLATION?: string;
   LOG_LEVEL?: string;
-  HYPERDRIVE?: { connectionString: string };
+  ANTHROPIC_API_KEY?: string;
 }
 
 export type AppBindings = {

@@ -29,10 +29,10 @@ app.get('/', async (c) => {
     const res = await query(
       c.env,
       `SELECT verse_euid, book_code, chapter_num, verse_num, verse_text
-         FROM bible.verses
-        WHERE verse_text ILIKE $1
+         FROM bible_verses
+        WHERE verse_text LIKE ? COLLATE NOCASE
         ORDER BY book_code, chapter_num, verse_num
-        LIMIT $2`,
+        LIMIT ?`,
       [pattern, limit],
     );
     return c.json({ scope, query: q, results: res.rows });
@@ -42,24 +42,23 @@ app.get('/', async (c) => {
     const res = await query(
       c.env,
       `SELECT strongs_number, transliteration, pronunciation, definition, short_definition
-         FROM bible.strongs_dictionary
-        WHERE definition ILIKE $1
-           OR short_definition ILIKE $1
-           OR transliteration ILIKE $1
-        LIMIT $2`,
-      [pattern, limit],
+         FROM bible_strongs_dictionary
+        WHERE definition LIKE ? COLLATE NOCASE
+           OR short_definition LIKE ? COLLATE NOCASE
+           OR transliteration LIKE ? COLLATE NOCASE
+        LIMIT ?`,
+      [pattern, pattern, pattern, limit],
     );
     return c.json({ scope, query: q, results: res.rows });
   }
 
-  // topics
   const res = await query(
     c.env,
     `SELECT DISTINCT topic
-       FROM bible.bsb_topical_index
-      WHERE topic ILIKE $1
+       FROM bible_bsb_topical_index
+      WHERE topic LIKE ? COLLATE NOCASE
       ORDER BY topic
-      LIMIT $2`,
+      LIMIT ?`,
     [pattern, limit],
   );
   return c.json({ scope, query: q, results: res.rows });

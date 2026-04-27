@@ -8,9 +8,7 @@ const app = new Hono<AppBindings>();
 
 app.get('/:euid', async (c) => {
   const euid = c.req.param('euid');
-  if (!isValidVerseEuid(euid)) {
-    return c.json({ error: 'invalid verse EUID' }, 400);
-  }
+  if (!isValidVerseEuid(euid)) return c.json({ error: 'invalid verse EUID' }, 400);
   const cascade = await fetchCascade(c.env, euid);
   if (!cascade.verse) return c.json({ error: 'verse not found' }, 404);
   return c.json(cascade);
@@ -18,9 +16,7 @@ app.get('/:euid', async (c) => {
 
 app.get('/:euid/text', async (c) => {
   const euid = c.req.param('euid');
-  if (!isValidVerseEuid(euid)) {
-    return c.json({ error: 'invalid verse EUID' }, 400);
-  }
+  if (!isValidVerseEuid(euid)) return c.json({ error: 'invalid verse EUID' }, 400);
   const verse = await fetchVerse(c.env, euid);
   if (!verse) return c.json({ error: 'verse not found' }, 404);
   return c.json(verse);
@@ -28,16 +24,14 @@ app.get('/:euid/text', async (c) => {
 
 app.get('/:euid/translations', async (c) => {
   const euid = c.req.param('euid');
-  if (!isValidVerseEuid(euid)) {
-    return c.json({ error: 'invalid verse EUID' }, 400);
-  }
+  if (!isValidVerseEuid(euid)) return c.json({ error: 'invalid verse EUID' }, 400);
   const [kjv, others] = await Promise.all([
     fetchVerse(c.env, euid),
     query<{ translation_code: string; verse_text: string }>(
       c.env,
       `SELECT translation_code, verse_text
-         FROM translations.verses
-        WHERE verse_euid = $1
+         FROM translations_verses
+        WHERE verse_euid = ?
         ORDER BY translation_code`,
       [euid],
     ),
@@ -51,15 +45,13 @@ app.get('/:euid/translations', async (c) => {
 
 app.get('/:euid/interlinear', async (c) => {
   const euid = c.req.param('euid');
-  if (!isValidVerseEuid(euid)) {
-    return c.json({ error: 'invalid verse EUID' }, 400);
-  }
+  if (!isValidVerseEuid(euid)) return c.json({ error: 'invalid verse EUID' }, 400);
   const res = await query(
     c.env,
     `SELECT word_euid, word_position, language, wlc_nestle_base,
             strongs_number, transliteration, bsb_english, morphology
-       FROM bible.bsb_interlinear
-      WHERE verse_euid = $1
+       FROM bible_bsb_interlinear
+      WHERE verse_euid = ?
       ORDER BY word_position`,
     [euid],
   );
@@ -68,14 +60,12 @@ app.get('/:euid/interlinear', async (c) => {
 
 app.get('/:euid/words', async (c) => {
   const euid = c.req.param('euid');
-  if (!isValidVerseEuid(euid)) {
-    return c.json({ error: 'invalid verse EUID' }, 400);
-  }
+  if (!isValidVerseEuid(euid)) return c.json({ error: 'invalid verse EUID' }, 400);
   const res = await query(
     c.env,
     `SELECT word_euid, word_position, word_text, person_euid, place_euid, year
-       FROM bible.word_index_kjv
-      WHERE verse_euid = $1
+       FROM bible_word_index_kjv
+      WHERE verse_euid = ?
       ORDER BY word_position`,
     [euid],
   );
@@ -84,14 +74,12 @@ app.get('/:euid/words', async (c) => {
 
 app.get('/:euid/commentary', async (c) => {
   const euid = c.req.param('euid');
-  if (!isValidVerseEuid(euid)) {
-    return c.json({ error: 'invalid verse EUID' }, 400);
-  }
+  if (!isValidVerseEuid(euid)) return c.json({ error: 'invalid verse EUID' }, 400);
   const res = await query<{ source: string; commentary_text: string }>(
     c.env,
     `SELECT source, commentary_text
-       FROM bible.commentary
-      WHERE verse_euid = $1
+       FROM bible_commentary
+      WHERE verse_euid = ?
       ORDER BY source`,
     [euid],
   );

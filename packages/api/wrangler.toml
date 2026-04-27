@@ -1,33 +1,21 @@
 name = "forge-api"
 main = "src/index.ts"
 compatibility_date = "2025-04-01"
-compatibility_flags = ["nodejs_compat"]
 
-# The Worker needs Node.js compatibility for the `pg` driver.
-# DATABASE_URL should be set as a secret: `wrangler secret put DATABASE_URL`
-# Example value: postgresql://postgres:PASSWORD@host:5432/theophysics
+# D1 binding — run `npm run db:create` once and paste the database_id below.
+[[d1_databases]]
+binding = "DB"
+database_name = "forge-bible"
+database_id = "REPLACE_AFTER_CREATE"
+migrations_dir = "migrations"
 
 [vars]
-# Non-secret defaults. Override via dashboard or secrets.
 DEFAULT_TRANSLATION = "KJV"
 LOG_LEVEL = "info"
 
-# Hyperdrive binding (recommended for production — configure in dashboard, then:
-#   wrangler hyperdrive create forge-pg --connection-string="..."
-# and set the id below).
-# [[hyperdrive]]
-# binding = "HYPERDRIVE"
-# id = "REPLACE_WITH_HYPERDRIVE_ID"
+# ANTHROPIC_API_KEY is set as a secret:  wrangler secret put ANTHROPIC_API_KEY
 
-# Domain routes (configure per deployment):
-# [[routes]]
-# pattern = "api.bible.theophysics.pro/*"
-# zone_name = "theophysics.pro"
-#
-# [[routes]]
-# pattern = "api.openintel.theophysics.pro/*"
-# zone_name = "theophysics.pro"
-
+# Per-domain deploys for the multi-database router (Phase 4 of the spec).
 [env.bible]
 name = "forge-api-bible"
 

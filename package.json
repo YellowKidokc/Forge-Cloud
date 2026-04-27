@@ -2,14 +2,21 @@
   "name": "forge-cloud",
   "version": "0.1.0",
   "private": true,
-  "description": "Forge Cloud — Cloudflare Workers + Hono + PostgreSQL. Bible study and research platform.",
+  "description": "Forge Cloud — Cloudflare Workers + Hono + D1 + React/TipTap. Bible study and research platform.",
   "workspaces": [
     "packages/*"
   ],
   "scripts": {
-    "dev:api": "npm run dev --workspace=@forge-cloud/api",
-    "deploy:api": "npm run deploy --workspace=@forge-cloud/api",
-    "typecheck": "npm run typecheck --workspaces --if-present"
+    "dev:api":     "npm run dev --workspace=@forge-cloud/api",
+    "dev:web":     "npm run dev --workspace=@forge-cloud/web",
+    "build":       "npm run build --workspaces --if-present",
+    "build:web":   "npm run build --workspace=@forge-cloud/web",
+    "deploy:api":  "npm run deploy --workspace=@forge-cloud/api",
+    "deploy:pages":"wrangler pages deploy packages/web/dist --project-name=forge-cloud-web --branch=main",
+    "typecheck":   "npm run typecheck --workspaces --if-present",
+    "db:create":   "npm run db:create --workspace=@forge-cloud/api",
+    "db:migrate":  "npm run db:migrate:remote --workspace=@forge-cloud/api",
+    "db:seed":     "npm run db:seed:remote --workspace=@forge-cloud/api"
   },
   "engines": {
     "node": ">=18"

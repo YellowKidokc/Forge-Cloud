@@ -9,7 +9,7 @@ app.get('/', async (c) => {
   const res = await query(
     c.env,
     `SELECT book_code, book_name, testament, book_order, chapter_count
-       FROM bible.books
+       FROM bible_books
       ORDER BY book_order`,
   );
   return c.json({ books: res.rows });
@@ -23,15 +23,15 @@ app.get('/:code', async (c) => {
     query(
       c.env,
       `SELECT book_code, book_name, testament, book_order, chapter_count
-         FROM bible.books
-        WHERE book_code = $1`,
+         FROM bible_books
+        WHERE book_code = ?`,
       [code],
     ),
     query(
       c.env,
       `SELECT chapter_num, verse_count
-         FROM bible.chapters
-        WHERE book_code = $1
+         FROM bible_chapters
+        WHERE book_code = ?
         ORDER BY chapter_num`,
       [code],
     ),
@@ -51,8 +51,8 @@ app.get('/:code/:chapter', async (c) => {
   const res = await query(
     c.env,
     `SELECT verse_euid, verse_num, verse_text
-       FROM bible.verses
-      WHERE book_code = $1 AND chapter_num = $2
+       FROM bible_verses
+      WHERE book_code = ? AND chapter_num = ?
       ORDER BY verse_num`,
     [code, chapter],
   );

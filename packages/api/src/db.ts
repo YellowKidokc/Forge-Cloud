@@ -1,31 +1,33 @@
-import { Pool, type QueryResult, type QueryResultRow } from 'pg';
 import type { Env } from './env';
 
-let pool: Pool | null = null;
-
-export function getPool(env: Env): Pool {
-  if (pool) return pool;
-
-  const connectionString = env.HYPERDRIVE?.connectionString ?? env.DATABASE_URL;
-  if (!connectionString) {
-    throw new Error('DATABASE_URL (or HYPERDRIVE binding) is not configured');
-  }
-
-  pool = new Pool({
-    connectionString,
-    max: 5,
-    idleTimeoutMillis: 30_000,
-    connectionTimeoutMillis: 10_000,
-  });
-
-  return pool;
+export interface QueryResult<T> {
+  rows: T[];
+  meta: D1Meta | null;
 }
 
-export async function query<T extends QueryResultRow = QueryResultRow>(
+export async function query<T = Record<string, unknown>>(
   env: Env,
-  text: string,
+  sql: string,
   params: unknown[] = [],
 ): Promise<QueryResult<T>> {
-  const p = getPool(env);
-  return p.query<T>(text, params as never[]);
+  const stmt = env.DB.prepare(sql);
+  const bound = params.length > 0 ? stmt.bind(...params) : stmt;
+  const res = await bound.all<T>();
+  return { rows: res.results ?? [], meta: res.meta ?? null };
+}
+
+export async function queryOne<T = Record<string, unknown>>(
+  env: Env,
+  sql: string,
+  params: unknown[] = [],
+): Promise<T | null> {
+  const stmt = env.DB.prepare(sql);
+  const bound = params.length > 0 ? stmt.bind(...params) : stmt;
+  return (await bound.first<T>()) ?? null;
+}
+
+interface D1Meta {
+  duration?: number;
+  rows_read?: number;
+  rows_written?: number;
 }

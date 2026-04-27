@@ -10,10 +10,10 @@ app.get('/:word', async (c) => {
   const res = await query(
     c.env,
     `SELECT verse_euid, word_position, word_text
-       FROM bible.bsb_concordance
-      WHERE LOWER(word_text) = $1
+       FROM bible_bsb_concordance
+      WHERE word_text = ? COLLATE NOCASE
       ORDER BY verse_euid, word_position
-      LIMIT $2`,
+      LIMIT ?`,
     [word, limit],
   );
   return c.json({ word, occurrences: res.rows });

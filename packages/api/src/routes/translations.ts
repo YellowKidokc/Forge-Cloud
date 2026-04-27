@@ -6,18 +6,16 @@ import { fetchVerse } from '../cascade';
 
 const app = new Hono<AppBindings>();
 
-// GET /api/translations
 app.get('/translations', async (c) => {
   const res = await query(
     c.env,
     `SELECT translation_code, translation_name, language, year_published, source
-       FROM translations.catalog
+       FROM translations_catalog
       ORDER BY translation_code`,
   );
   return c.json({ translations: res.rows });
 });
 
-// GET /api/parallel/:euid — side-by-side KJV + all translations
 app.get('/parallel/:euid', async (c) => {
   const euid = c.req.param('euid');
   if (!isValidVerseEuid(euid)) return c.json({ error: 'invalid verse EUID' }, 400);
@@ -26,8 +24,8 @@ app.get('/parallel/:euid', async (c) => {
     query<{ translation_code: string; verse_text: string }>(
       c.env,
       `SELECT translation_code, verse_text
-         FROM translations.verses
-        WHERE verse_euid = $1
+         FROM translations_verses
+        WHERE verse_euid = ?
         ORDER BY translation_code`,
       [euid],
     ),

@@ -4,7 +4,7 @@
     "module": "ES2022",
     "moduleResolution": "Bundler",
     "lib": ["ES2022"],
-    "types": ["@cloudflare/workers-types", "node"],
+    "types": ["@cloudflare/workers-types"],
     "strict": true,
     "noImplicitAny": true,
     "esModuleInterop": true,
@@ -13,8 +13,7 @@
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "isolatedModules": true,
-    "allowSyntheticDefaultImports": true,
-    "jsx": "react-jsx"
+    "allowSyntheticDefaultImports": true
   },
   "include": ["src/**/*.ts"]
 }
