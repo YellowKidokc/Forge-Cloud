@@ -6,7 +6,7 @@ compatibility_date = "2025-04-01"
 [[d1_databases]]
 binding = "DB"
 database_name = "forge-bible"
-database_id = "REPLACE_AFTER_CREATE"
+database_id = "3e3e409e-929d-4dfe-8c23-421a57179501"
 migrations_dir = "migrations"
 
 [vars]
